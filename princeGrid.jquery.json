@@ -1,0 +1,41 @@
+{
+"name": "princeGrid",
+"title": "jQuery table/grid maker plugin for C# ASP.NET",
+"description": "JQuery plugin (for designing tables/grids in C# ASP.NET pages) - will easily fill html tables with MS SQL data from Stored Procedures via AJAX. Options can be set to allow data-editing directly from the table. Tables will include basic sorting.",
+"keywords": [
+"grid",
+"table",
+"sorting",
+"stored",
+"procedures",
+"storedprocedures"
+],
+"version": "0.0.1",
+"author": {
+"name": "eviCORE",
+"url": "https://github.com/fictus/princeGrid/blob/master/AUTHOR.txt"
+},
+"maintainers": [
+{
+"name": "Luis Valle",
+"email": "luis.e.valle@gmail.com",
+"url": "http://www.evicore.com"
+}
+],
+"licenses": [
+{
+"type": "Public Domain",
+"url": "https://github.com/fictus/princeGrid/blob/master/LICENSE"
+}
+],
+"bugs": "https://github.com/fictus/princeGrid/issues",
+"homepage": "https://github.com/fictus/princeGrid",
+"docs": "https://github.com/fictus/princeGrid",
+"download": "http://code.jquery.com/#princeGrid",
+"dependencies": {
+"jquery": ">=1.4.1",
+"json2.js": "2",
+"princeGrid.UI.css": "included",
+"prncGrd.ashx": "included"
+}
+}
