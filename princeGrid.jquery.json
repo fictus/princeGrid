@@ -35,7 +35,7 @@
 "dependencies": {
 "jquery": ">=1.4.1",
 "json2.js": "2",
-"princeGrid.UI.css": "included",
-"prncGrd.ashx": "included"
+"princeGrid.UI.css": "0.0.1",
+"prncGrd.ashx": "0.0.1"
 }
 }
