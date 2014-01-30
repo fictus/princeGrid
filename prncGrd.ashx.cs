@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -35,7 +35,7 @@ namespace DotNetNuke.Modules.PrinceGrid //
             }
             catch (Exception ex)
             {
-                writeResult = "{ \"responseResult\": \"Failed\", \"errorCode\": \"" + ex.Message.ToString().Trim() + "\" }";
+                writeResult = "{ \"responseResult\": \"Failed\", \"errorCode\": \"" + ex.Message.ToString().Replace("\r", @"\\r").Replace("\n", @"\\n").Trim() + "\" }";
                 HttpContext.Current.Response.ContentType = "application/json";
                 HttpContext.Current.Response.Write(writeResult);
             }

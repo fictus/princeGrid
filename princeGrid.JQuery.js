@@ -1,15 +1,16 @@
-/****************************
+﻿/****************************
     PrinceGrid.JQuery.js
     --------------------
-    Version 0.0.1a (2014)
+    Version 0.0.2 (2014)
 
 
     Created by Luis Valle
 
     REQUIRED COMPONENTS:
     -------------------
-    jquery-1.4.1.min.js or higher
-    json2.js (for browsers that don't support json parsing)
+    jquery-1.7.2.min.js (http://code.jquery.com/jquery-1.7.2.min.js)
+    jQuery UI 1.8.16 (http://jqueryui.com/resources/download/jquery-ui-1.8.16.zip)
+    json2.js (for browsers that don't support json parsing) (https://github.com/douglascrockford/JSON-js/blob/master/json2.js)
     prncGrd.ashx (generic AJAX handler)
     princeGrid.UI.css (for table style)
 
@@ -178,6 +179,10 @@ var prncGrdRefreshTable = new Array();
     $.fn.populateFromStoredProc = function (storedProc, spParams, JsonHndlr, conn, tblOptions) {
         
         var element = this;
+        if (document.getElementById($(element).attr('id')) == null) {
+            alert("ERROR: Your Table doesn't exist. Please check your '.populateFromStoredProc' for typos and try again.");
+            return false;
+        }
         var wt = prncFunctionAttachWait($(element).attr('id'));
         
         prnGridFunction_Wait();
@@ -525,6 +530,11 @@ var prncGrdRefreshTable = new Array();
     };
 
     $.fn.rowEditFunction = function (xFunction) {
+        //var elementx = this;
+        if (document.getElementById($(this).attr('id')) == null) {
+            //alert("ERROR: Table ''" + $(element).attr('id') + "'' doesn't exist. Please check your '.populateFromStoredProc' for typos and try again.");
+            return false;
+        }
         if (xFunction != null) {
             xFunction = xFunction.replace(/\((.*?)\)/g, '');
             var funcExists = false;
@@ -544,6 +554,10 @@ var prncGrdRefreshTable = new Array();
 
     $.fn.saveChangesToSQLdb = function (storedProc, spParams, JsonHndlr, conn) {
         var element = this;
+        if (document.getElementById($(element).attr('id')) == null) {
+            //alert("ERROR: Table ''" + $(element).attr('id') + "'' doesn't exist. Please check your '.populateFromStoredProc' for typos and try again.");
+            return false;
+        }
         prnGridFunction_Wait();
         $.ajax({
             url: JsonHndlr,
@@ -804,7 +818,7 @@ function prncFunctionShowEditDiv() {
     // 2 - don't show; it's a button or link or hidden
     // prncGrid_tblEdit
     var usedTable = arguments[arguments.length - 2];
-    var e = arguments[arguments.length - 1];
+    var e = arguments[arguments.length - 1] || window.event;
 
     $('#prncGrid_txtTblInUseID').val(usedTable);
 
@@ -848,11 +862,15 @@ function prncFunctionShowEditDiv() {
     var pageY = e.pageY;
 
     dv.style.display = '';
-    if (pageX === undefined) { // handler for stupid IE
+    if ('srcElement' in e) { // handler for stupid IE // pageX === undefined
+        //alert('ie');
         try {
-            var parentOffset = $("#prncGrid_dvEditMenu").parent().offset();
+            var posx = window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+            var posy = window.event.clientY + document.body.scrollTop  + document.documentElement.scrollTop; 
+
+            //var parentOffset = $("#prncGrid_dvEditMenu").parent().offset();
             //var paddingg = (20 + 10 + 4); // include the padding of all possible elements encapsulating our element
-            var relX = e.clientX - parentOffset.left;
+            //var relX = e.clientX - parentOffset.left;
             //var relY = (e.clientY - parentOffset.top) + paddingg;            
 
             $("#" + usedTable + " tr td").css('background-color', '');
@@ -862,12 +880,13 @@ function prncFunctionShowEditDiv() {
                 my: "left+1 top+1",
                 of: e.srcElement //$(e.srcElement).closest('tr').children('td')
             });
-            $("#prncGrid_dvEditMenu").css('left', relX + 'px');
+            //$("#prncGrid_dvEditMenu").css('left', relX + 'px');
         } catch (ex) {
             alert(ex.message + " - (prncFunctionShowEditDiv)");
         }
 
     } else { // all other browsers
+        //alert('other browser');
         $("#" + usedTable + " tr td").css('background-color', '');
         $(e.target).closest('tr').children('td').css('background', '#EEF3E2');
 
@@ -877,9 +896,13 @@ function prncFunctionShowEditDiv() {
         });
     }
 
-    $("#prncGrid_dvEditMenu").animate({ height: $("#prncGrid_tblEdit").css("height") }, 250, function () {
-        dv.style.height = 'auto';
-    });
+    try {
+        $("#prncGrid_dvEditMenu").animate({ height: $("#prncGrid_tblEdit").css("height") }, 250, function () {
+            dv.style.height = 'auto';
+        });
+    } catch (ez) {
+        alert(ez.message + " - (prncFunctionShowEditDiv)");
+    }    
 }
 
 function prncFunctionHideEditDiv() {

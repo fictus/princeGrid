@@ -1,14 +1,15 @@
     PrinceGrid.JQuery.js
     --------------------
-    Version 0.0.1a (2014)
+    Version 0.0.2 (2014)
 
 
     Created by Luis Valle
 
     REQUIRED COMPONENTS:
     -------------------
-    jquery-1.4.1.min.js or higher
-    json2.js (for browsers that don't support json parsing)
+    jquery-1.7.2.min.js (http://code.jquery.com/jquery-1.7.2.min.js)
+    jQuery UI 1.8.16 (http://jqueryui.com/resources/download/jquery-ui-1.8.16.zip)
+    json2.js (for browsers that don't support json parsing) (https://github.com/douglascrockford/JSON-js/blob/master/json2.js)
     prncGrd.ashx (generic AJAX handler)
     princeGrid.UI.css (for table style)
 
