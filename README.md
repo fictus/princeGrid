@@ -1,6 +1,6 @@
-    PrinceGrid.JQuery.js
+PrinceGrid.JQuery.js
     --------------------
-    Version 0.0.2 (2014)
+    Version 0.0.3 (2014)
 
 
     Created by Luis Valle
