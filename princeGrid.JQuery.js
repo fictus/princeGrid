@@ -1,173 +1,173 @@
 ﻿/****************************
-    PrinceGrid.JQuery.js
-    --------------------
-    Version 0.0.5 (2014)
+PrinceGrid.JQuery.js
+--------------------
+Version 0.0.6 (2014)
 
 
-    Created by Luis Valle
+Created by Luis Valle
 
-    REQUIRED COMPONENTS:
-    -------------------
-    jquery-1.7.2.min.js (http://code.jquery.com/jquery-1.7.2.min.js)
-    jQuery UI 1.8.16 (http://jqueryui.com/resources/download/jquery-ui-1.8.16.zip)
-    json2.js (for browsers that don't support json parsing) (https://github.com/douglascrockford/JSON-js/blob/master/json2.js)
-    prncGrd.ashx (generic AJAX handler)
-    princeGrid.UI.css (for table style)
-
-
-
-
-
-    WHAT IS PrinceGrid.JQuery.js?
-    -----------------------------
-    It is a JQuery plugin to create tables via AJAX in MS SQL back-ends by passing SQL StoredProcedures .
-    The table also gives Row-Editing functionality, sorting and basic filtering.
+REQUIRED COMPONENTS:
+-------------------
+jquery-1.7.2.min.js (http://code.jquery.com/jquery-1.7.2.min.js)
+jQuery UI 1.8.16 (http://jqueryui.com/resources/download/jquery-ui-1.8.16.zip)
+json2.js (for browsers that don't support json parsing) (https://github.com/douglascrockford/JSON-js/blob/master/json2.js)
+prncGrd.ashx (generic AJAX handler)
+princeGrid.UI.css (for table style)
 
 
 
 
-    BASIC USE:
-    -----------
-    (1) Create an html table with no rows, with a unique ID, like:
 
-            <table id="tblMyCustomers">
-            </table>
+WHAT IS PrinceGrid.JQuery.js?
+-----------------------------
+It is a JQuery plugin to create tables via AJAX in MS SQL back-ends by passing SQL StoredProcedures .
+The table also gives Row-Editing functionality, sorting and basic filtering.
 
-    (2) Modify the included prncGrd.ashx namespace to work with your aspx page.
 
-    (3) Include PrinceGrid.JQuery.js (and dependencies) in your aspx page header.
+
+
+BASIC USE:
+-----------
+(1) Create an html table with no rows, with a unique ID, like:
+
+<table id="tblMyCustomers">
+</table>
+
+(2) Modify the included prncGrd.ashx namespace to work with your aspx page.
+
+(3) Include PrinceGrid.JQuery.js (and dependencies) in your aspx page header.
         
-            <script type="text/javascript" src='princeGrid.JQuery.js'></script>
-            <script type="text/javascript" src="json2.js"></script>
-            <link href='princeGrid.UI.css' rel="stylesheet" />
+<script type="text/javascript" src='princeGrid.JQuery.js'></script>
+<script type="text/javascript" src="json2.js"></script>
+<link href='princeGrid.UI.css' rel="stylesheet" />
 
-    (4) Initiate PrinceGrid in your javascript:
+(4) Initiate PrinceGrid in your javascript:
 
-            // if no SQL params are needed you must pass 'null'
-            var SQLparams = { "@parentName": "010200036" };
+// if no SQL params are needed you must pass 'null'
+var SQLparams = { "@parentName": "010200036" };
 
-            // conn is the name of your connection from your web.config file
-            var conn = 'PrinceSQLDataServer';
+// conn is the name of your connection from your web.config file
+var conn = 'PrinceSQLDataServer';
 
-            $('#tblMyCustomers').populateFromStoredProc('spRetrieveFourthShiftUsersPmc', null, 'prncGrd.ashx', conn); 
-
-
-
-
-
-        That's all! PrinceGrid will communicate with the SQL Server and populate your table.
+$('#tblMyCustomers').populateFromStoredProc('spRetrieveFourthShiftUsersPmc', null, 'prncGrd.ashx', conn); 
 
 
 
 
-    IF YOU ENABLE TABLE-EDITING:
-    ----------------------------
-        simply double-click desired Row to edit Row-Contents (see examples below)
 
-    ADVANCED OPTIONS:
-    ------------------
-        prncGrdOption constructor
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+That's all! PrinceGrid will communicate with the SQL Server and populate your table.
 
-        You can specify the following custom column 'prncGrdOption' constructor with the following parameters:
 
-        PARAMETER 0 - COLUMN NAME
-            (ex. "Customer Name")
 
-        PARAMETER 1 - COLUMN TYPE
-            0 = NORMAL/DEFAULT
-            1 = LINK BUTTON
-            2 = BUTTON
-            3 = HIDE COLUMN
 
-        PARAMETER 2 - ENABLE EDITING
-            false = disabled
-            true  = enabled
+IF YOU ENABLE TABLE-EDITING:
+----------------------------
+simply double-click desired Row to edit Row-Contents (see examples below)
 
-        PARAMETER 3 - LINK or BUTTON caption text
-            (ex. "Click HERE")
+ADVANCED OPTIONS:
+------------------
+prncGrdOption constructor
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        PARAMETER 4 - IF BUTTON, SPECIFY YOUR JAVASCRIPT FUNCTION (all Row-Data will be passed to your function; there you can do what ever you want with this data):
+You can specify the following custom column 'prncGrdOption' constructor with the following parameters:
+
+PARAMETER 0 - COLUMN NAME
+(ex. "Customer Name")
+
+PARAMETER 1 - COLUMN TYPE
+0 = NORMAL/DEFAULT
+1 = LINK BUTTON
+2 = BUTTON
+3 = HIDE COLUMN
+
+PARAMETER 2 - ENABLE EDITING
+false = disabled
+true  = enabled
+
+PARAMETER 3 - LINK or BUTTON caption text
+(ex. "Click HERE")
+
+PARAMETER 4 - IF BUTTON, SPECIFY YOUR JAVASCRIPT FUNCTION (all Row-Data will be passed to your function; there you can do what ever you want with this data):
             
-            function populateCustomersTable() {
-                var SQLparams = { "@itemNumberDwg": "010200036" };
-                var conn = 'EngineeringDataServer';
+function populateCustomersTable() {
+var SQLparams = { "@itemNumberDwg": "010200036" };
+var conn = 'EngineeringDataServer';
 
-                var myHeader = new Array();
-                myHeader.push(new prncGrdOption("Item Number", 0));
-                myHeader.push(new prncGrdOption("Customer Name", 0));
-                myHeader.push(new prncGrdOption("Item Status", 0));
-                myHeader.push(new prncGrdOption("Item Revision", 0));
-                myHeader.push(new prncGrdOption("Item UM", 0));
-                myHeader.push(new prncGrdOption("Make Buy Code", 0));
-                myHeader.push(new prncGrdOption("Customer ID", 0));
-                myHeader.push(new prncGrdOption("Drawing Link", 1, false, "Show PDF"));  //<---------------- will create a LINK with the cell-data as the href
-                myHeader.push(new prncGrdOption("Released To Production", 0)); 
-                myHeader.push(new prncGrdOption("Volume Part", 2, false, "Show", "showCustomerName")); //<-- will create a button that triggers function showCustomerName()
-                myHeader.push(new prncGrdOption("Date Entered", 3)); //<------------------------------------ this colum will be hidden
+var myHeader = new Array();
+myHeader.push(new prncGrdOption("Item Number", 0));
+myHeader.push(new prncGrdOption("Customer Name", 0));
+myHeader.push(new prncGrdOption("Item Status", 0));
+myHeader.push(new prncGrdOption("Item Revision", 0));
+myHeader.push(new prncGrdOption("Item UM", 0));
+myHeader.push(new prncGrdOption("Make Buy Code", 0));
+myHeader.push(new prncGrdOption("Customer ID", 0));
+myHeader.push(new prncGrdOption("Drawing Link", 1, false, "Show PDF"));  //<---------------- will create a LINK with the cell-data as the href
+myHeader.push(new prncGrdOption("Released To Production", 0)); 
+myHeader.push(new prncGrdOption("Volume Part", 2, false, "Show", "showCustomerName")); //<-- will create a button that triggers function showCustomerName()
+myHeader.push(new prncGrdOption("Date Entered", 3)); //<------------------------------------ this colum will be hidden
 
-                $('#tblMyCustomers').populateFromStoredProc('spEngItemDrawing', SQLparams, 'prncGrd.ashx', conn, myHeader);
-            }
+$('#tblMyCustomers').populateFromStoredProc('spEngItemDrawing', SQLparams, 'prncGrd.ashx', conn, myHeader);
+}
             
-            function showCustomerName() {
-                alert(arguments[1]);
+function showCustomerName() {
+alert(arguments[1]);
 
-                // all your Row-data can be accessed via arguments[?] (enter the desired coulumn index
-            }
+// all your Row-data can be accessed via arguments[?] (enter the desired coulumn index
+}
 
             
-        PARAMETER 5 - IF ANY COLUMN EDITING IS SET TO TRUE you must pass the name of your javascript function for calling the Save Method:
+PARAMETER 5 - IF ANY COLUMN EDITING IS SET TO TRUE you must pass the name of your javascript function for calling the Save Method:
             
-                function populateCustomersTable() {
-                    var conn = 'DivApplicationsDataServer';
+function populateCustomersTable() {
+var conn = 'DivApplicationsDataServer';
 
-                    var tblHeader1 = new prncGrdOption("Entry ID", 3);
-                    var tblHeader2 = new prncGrdOption("Truck", 0);
-                    var tblHeader3 = new prncGrdOption("Dhm", 0, true); //<----------------- this column will be editable
-                    var tblHeader4 = new prncGrdOption("Hci", 0, true); //<----------------- this column will be editable
-                    var tblHeader5 = new prncGrdOption("Lch", 0, true); //<----------------- this column will be editable
-                    var tblHeader6 = new prncGrdOption("Ohc", 0, true); //<----------------- this column will be editable
-                    var tblHeader7 = new prncGrdOption("Phc", 0, true); //<----------------- this column will be editable
-                    var tblHeader8 = new prncGrdOption("Pds", 0, true); //<----------------- this column will be editable
-                    var tblHeader9 = new prncGrdOption("Other Destinations", 0, true); //<-- this column will be editable
-                    var tblHeader10 = new prncGrdOption("Last Update", 0);
-                    var myHeader = [tblHeader1, tblHeader2, tblHeader3, tblHeader4, tblHeader5, tblHeader6, tblHeader7, tblHeader8, tblHeader9, tblHeader10];
+var tblHeader1 = new prncGrdOption("Entry ID", 3);
+var tblHeader2 = new prncGrdOption("Truck", 0);
+var tblHeader3 = new prncGrdOption("Dhm", 0, true); //<----------------- this column will be editable
+var tblHeader4 = new prncGrdOption("Hci", 0, true); //<----------------- this column will be editable
+var tblHeader5 = new prncGrdOption("Lch", 0, true); //<----------------- this column will be editable
+var tblHeader6 = new prncGrdOption("Ohc", 0, true); //<----------------- this column will be editable
+var tblHeader7 = new prncGrdOption("Phc", 0, true); //<----------------- this column will be editable
+var tblHeader8 = new prncGrdOption("Pds", 0, true); //<----------------- this column will be editable
+var tblHeader9 = new prncGrdOption("Other Destinations", 0, true); //<-- this column will be editable
+var tblHeader10 = new prncGrdOption("Last Update", 0);
+var myHeader = [tblHeader1, tblHeader2, tblHeader3, tblHeader4, tblHeader5, tblHeader6, tblHeader7, tblHeader8, tblHeader9, tblHeader10];
                 
-                    $('#tblMyCustomers').populateFromStoredProc('spShipmentTruckRoute', null, 'prncGrd.ashx', conn, myHeader);
+$('#tblMyCustomers').populateFromStoredProc('spShipmentTruckRoute', null, 'prncGrd.ashx', conn, myHeader);
 
-                    // pass your javascript editing function
-                    $('#tblMyCustomers').rowEditFunction("editSaveCustomerParts");
-                }
+// pass your javascript editing function
+$('#tblMyCustomers').rowEditFunction("editSaveCustomerParts");
+}
 
-                function editSaveCustomerParts() {
-                    //var tblID = arguments[1]; this argument contains your table ID if you need it for something else                    
-                    //alert(inData.entry[1].value + ' --- ' + inData.entry[1].text + '\n\n' + JSON.stringify(inData)); // Peak inside incoming data to know what entries you need
-                    //return false;
+function editSaveCustomerParts() {
+//var tblID = arguments[1]; this argument contains your table ID if you need it for something else                    
+//alert(inData.entry[1].value + ' --- ' + inData.entry[1].text + '\n\n' + JSON.stringify(inData)); // Peak inside incoming data to know what entries you need
+//return false;
 
-                    // all your editing and original Row-data is received in a JSON object inside arguments[0]
-                    var inData = arguments[0];
+// all your editing and original Row-data is received in a JSON object inside arguments[0]
+var inData = arguments[0];
 
                     
 
-                    if (confirm("Are you sure you want to SAVE these Changes?")) {
-                        //----- IMPORTANT ------------------------------------------------------------------
-                        // accessing your incoming data is done in three ways:
-                        //
-                        // inData.entry[0].column = contains the name of the column (should you need it)
-                        // inData.entry[0].value = contains the original value of the cell (before editing)
-                        // inData.entry[0].text = contains the changes you made in that given cell textbox
-                        //----------------------------------------------------------------------------------
+if (confirm("Are you sure you want to SAVE these Changes?")) {
+//----- IMPORTANT ------------------------------------------------------------------
+// accessing your incoming data is done in three ways:
+//
+// inData.entry[0].column = contains the name of the column (should you need it)
+// inData.entry[0].value = contains the original value of the cell (before editing)
+// inData.entry[0].text = contains the changes you made in that given cell textbox
+//----------------------------------------------------------------------------------
 
-                        // you must build your SQL Parameters this way:
-                        var SQLparams = { "@EntryID": inData.entry[0].value, "@dmh": inData.entry[2].text, "@hci": inData.entry[3].text, "@lch": inData.entry[4].text, "@ohc": inData.entry[5].text, "@phc": inData.entry[6].text, "@pds": inData.entry[7].text, "@otherDestinations": inData.entry[8].text };
-                        var conn = 'DivApplicationsDataServer';
+// you must build your SQL Parameters this way:
+var SQLparams = { "@EntryID": inData.entry[0].value, "@dmh": inData.entry[2].text, "@hci": inData.entry[3].text, "@lch": inData.entry[4].text, "@ohc": inData.entry[5].text, "@phc": inData.entry[6].text, "@pds": inData.entry[7].text, "@otherDestinations": inData.entry[8].text };
+var conn = 'DivApplicationsDataServer';
 
-                        // finally, you must call 'saveChangesToSQLdb' and pass your Stored Procedure and parameters this way:
-                        $('#tblMyCustomers').saveChangesToSQLdb('spShipmentUpdateTruckRoute', SQLparams, 'prncGrd.ashx', conn);
-                    } else {
-                        return false;
-                    }
-                }
+// finally, you must call 'saveChangesToSQLdb' and pass your Stored Procedure and parameters this way:
+$('#tblMyCustomers').saveChangesToSQLdb('spShipmentUpdateTruckRoute', SQLparams, 'prncGrd.ashx', conn);
+} else {
+return false;
+}
+}
 
         
 ***************************/
@@ -175,17 +175,17 @@
 var prncGrdSaveFunctions = new Array();
 var prncGrdRefreshTable = new Array();
 (function ($) {
-    
+
     $.fn.populateFromStoredProc = function (storedProc, spParams, JsonHndlr, conn, tblOptions) {
-        
+
         var element = this;
         if (document.getElementById($(element).attr('id')) == null) {
             alert("ERROR: Your Table doesn't exist. Please check your '.populateFromStoredProc' for typos and try again.");
             return false;
         }
         var wt = prncFunctionAttachWait($(element).attr('id'));
-        
-        prnGridFunction_Wait();
+
+        prnGridFunction_Wait($(element).attr('id'));
         AJAXcom();
 
         function AJAXcom() {
@@ -265,26 +265,26 @@ var prncGrdRefreshTable = new Array();
                     //alert("ERROR: Your table only has '" + myOpsInt + "' columns but SQL is returning '" + data.ColCount + "' columns. This means you didn't create enough ''prncGrdOption'' column headers. Verify your prncGrdOption javascript columns and Add more to match what SQL is returning.");
                     //return false;
                 }
-            }            
+            }
 
             //--- Add Header -----
             var html = "";
             var sortClick = "";
             var editButtonShow = "";
             if (tblOptions != null) {
-                for (var n = 0; n < tblOptions.length ; n++) {
+                for (var n = 0; n < tblOptions.length; n++) {
                     if (tblOptions[n].isEditable == true) {
                         editButtonShow = "<img id=\"prncGrdImg_DblClick_" + $(element).attr('id') + "\" alt=\"\" title=\"To edit Table contents double-click desired ROW.\" src=\"" + prncImgEditable + "\" style=\"position:absolute;margin-left:-17px;margin-top:-17px;\" onclick=\"alert('To edit Table contents double-click desired ROW.');\" onmouseover=\"$(this).css('cursor','pointer');\" onmouseout=\"$(this).css('cursor','default');\" />";
                         break;
                     }
                 }
             }
-            
+
             if (tblOptions == null) {
                 totalCELLS = parseInt(data.ColCount);
 
                 html = "<tr>";
-                for (var i = 0; i < totalCELLS ; i++) {
+                for (var i = 0; i < totalCELLS; i++) {
                     var ccTmp = "";
                     if (i == 0) {
                         ccTmp = editButtonShow;
@@ -302,7 +302,7 @@ var prncGrdRefreshTable = new Array();
                 for (var i = 0; i < tblOptions.length; i++) {
                     var xClOpt = tblOptions[i];
                     var ccTmp = "";
-                    if (xClOpt.columnType == 3) {                        
+                    if (xClOpt.columnType == 3) {
                         html = html + "<th style='display:none;' class='prcGridTblhead'>" + ccTmp + xClOpt.columnHeader + "</th>";
                     } else {
                         if (hiddenFirstCol == -1) {
@@ -314,25 +314,25 @@ var prncGrdRefreshTable = new Array();
                             sortClick = "<img id=\"img_prncGrd_col_" + i + "_" + $(element).attr('id') + "\" alt=\"▼\" src=\"" + prncImgSortASC + "\" style=\"FILTER:alpha(opacity=30);opacity:0.3;float:right;\" onclick=\"prncGrdsortTable('" + $(element).attr('id') + "'," + i + ",'img_prncGrd_col_" + i + "_" + $(element).attr('id') + "');\" onmouseover=\"$(this).css('cursor','pointer');\" onmouseout=\"$(this).css('cursor','default');\" /></input><input id=\"txt_prncGrid_imgIndex_" + i + "_" + $(element).attr('id') + "\" type=\"text\" name=\"txt_prncGrid_imgIndex_" + i + "_" + $(element).attr('id') + "\" style=\"display:none;\" value=\"false\"></input>";
                         }
                         html = html + "<th id=\"" + 'col_' + i + "\" class=\"prcGridTblhead\">" + ccTmp + "<div style=\"display:table;width:100%;\"><div style=\"display:table-row;\"><div style=\"display:table-cell;text-align:center;\"><span id=\"lblprncGrid_ColHeader_" + i + "_" + $(element).attr('id') + "\">" + xClOpt.columnHeader + "</span></div><div style=\"display:table-cell;text-align:right;\">" + sortClick + "<div></div></div></th>";
-                    }                                       
+                    }
                 }
 
                 html = html + "</tr>";
                 $(element).append(html);
-            }            
+            }
 
             //--- Add filter -----
-            
+
             html = "<tr><th colspan=\"" + totalCELLS + "\" class=\"prcGridTblFilter\">"; //data.ColCount
             html = html + "<span style=\"font-weight:normal;color:#696969;font-size:small;\">Filter by:</span>";
             html = html + "<select id=\"cmb_prncGrid_FilterBy_" + $(element).attr('id') + "\" name=\"cmb_prncGrid_FilterBy_" + $(element).attr('id') + "\" style=\"font-weight:normal;color:black;font-size:small;width:auto;background-color:#EEF3E2;color:#696969;margin-left:5px;\">";
             var indexIdentified = -1;
-            for (var i = 0; i < totalCELLS ; i++) { //parseInt(data.ColCount)
+            for (var i = 0; i < totalCELLS; i++) { //parseInt(data.ColCount)
                 if (tblOptions == null) {
                     indexIdentified = 0;
-                    if (data.headder[i]['col_' + i]) {                        
+                    if (data.headder[i]['col_' + i]) {
                         html = html + "<option id=\"opt_prncGrid_" + i + "_" + $(element).attr('id') + "\" value=\"" + data.headder[i]['col_' + i] + "\">" + data.headder[i]['col_' + i] + "</option>";
-                    }                    
+                    }
                 } else {
                     if (tblOptions[i].columnType == 0 || tblOptions[i].columnType == 4) {
                         if (indexIdentified == -1) {
@@ -340,7 +340,7 @@ var prncGrdRefreshTable = new Array();
                         }
                         html = html + "<option id=\"opt_prncGrid_" + i + "_" + $(element).attr('id') + "\" value=\"" + tblOptions[i].columnHeader + "\">" + tblOptions[i].columnHeader + "</option>";
                     }
-                }                               
+                }
             }
             html = html + "</select>";
             html = html + "<input id=\"txt_prncGrid_FilterBy_" + $(element).attr('id') + "\" type=\"text\" name=\"txt_prncGrid_FilterBy_" + $(element).attr('id') + "\" style=\"font-weight:normal;color:black;font-size:small;width:90px;margin-left:5px;\" autocomplete=\"off\" onkeyup=\"$.fn.prnGrid_searchTable(this);\"></input><input id=\"txt_prncGrid_Index_" + $(element).attr('id') + "\" type=\"text\" name=\"txt_prncGrid_Index_" + $(element).attr('id') + "\" style=\"display:none;\" value=\"" + indexIdentified + "\"></input>";
@@ -358,21 +358,21 @@ var prncGrdRefreshTable = new Array();
             }
 
             //--- Add ROWS -----
-            html = "";            
-            for (var i = 0; i < parseInt(data.RowCount) ; i++) {
+            html = "";
+            for (var i = 0; i < parseInt(data.RowCount); i++) {
                 var EditableFunction = "";
                 if (tblOptions) {
                     var tableIsEditable = false;
-                    for (var n = 0; n < tblOptions.length ; n++) {
+                    for (var n = 0; n < tblOptions.length; n++) {
                         if (tblOptions[n].isEditable == true) {
                             tableIsEditable = true;
                             break;
                         }
                     }
-                    
+
                     if (tableIsEditable == true) {
                         var editArray = "";
-                        for (var n = 0; n < tblOptions.length ; n++) {
+                        for (var n = 0; n < tblOptions.length; n++) {
                             var whaEditIs = "";
                             var editCellContent = "";
                             if (tblOptions[n].isEditable == true && tblOptions[n].columnType == 0) {
@@ -398,16 +398,16 @@ var prncGrdRefreshTable = new Array();
                     }
                 }
                 html = "<tr" + EditableFunction + ">";
-                for (var j = 0; j < totalCELLS ; j++) { //parseInt(data.ColCount)
+                for (var j = 0; j < totalCELLS; j++) { //parseInt(data.ColCount)
                     if (tblOptions == null) {
                         if (data.rows[i]['row_' + i + '_' + j]) {
                             html = html + "<td>" + data.rows[i]['row_' + i + '_' + j] + "</td>";
                         } else {
                             html = html + "<td></td>";
-                        }                        
-                    } else {                        
+                        }
+                    } else {
                         if (tblOptions[j].columnType == 0) {
-                            var CellTypeX = "";                            
+                            var CellTypeX = "";
                             if (tblOptions[j].isEditable == false) {
                                 CellTypeX = "prncCellType=\"normal\"";
                             } else {
@@ -417,14 +417,14 @@ var prncGrdRefreshTable = new Array();
                                 html = html + "<td " + CellTypeX + ">" + data.rows[i]['row_' + i + '_' + j] + "</td>";
                             } else {
                                 html = html + "<td " + CellTypeX + "></td>";
-                            }                            
+                            }
                         } else if (tblOptions[j].columnType == 1) {
                             var CellTypeX = "prncCellType=\"link\"";
                             var lknA = "<a target=\"_blank\" href=\"" + data.rows[i]['row_' + i + '_' + j] + "\">" + tblOptions[j].buttonText + "</a>";
                             html = html + "<td " + CellTypeX + ">" + lknA + "</td>";
                         } else if (tblOptions[j].columnType == 2) {
                             var CellTypeX = "prncCellType=\"button\"";
-                            var allTog = "";                            
+                            var allTog = "";
                             var bFunc = tblOptions[j].runFunction;
                             if (bFunc != null) {
                                 bFunc = bFunc.replace(/\((.*?)\)/g, '');
@@ -432,12 +432,12 @@ var prncGrdRefreshTable = new Array();
 
                                 var xxARGS = "";
                                 if (tblOptions[j].functionArguments == 'allCells') {
-                                    for (var n = 0; n < totalCELLS ; n++) {
+                                    for (var n = 0; n < totalCELLS; n++) {
                                         if (data.rows[i]['row_' + i + '_' + n]) {
                                             xxARGS = xxARGS + $.fn.prnGrid_escape(data.rows[i]['row_' + i + '_' + n]) + ",";
                                         } else {
                                             xxARGS = xxARGS + $.fn.prnGrid_escape("") + ",";
-                                        }                                        
+                                        }
                                     }
                                     if (xxARGS.substr(xxARGS.length - 1) == ",") {
                                         xxARGS = xxARGS.substring(0, xxARGS.length - 1);
@@ -445,12 +445,12 @@ var prncGrdRefreshTable = new Array();
                                 } else {
                                     if ($.isArray(tblOptions[j].functionArguments)) {
                                         var tempArray = tblOptions[j].functionArguments;
-                                        for (var n = 0; n < tempArray.length ; n++) {
+                                        for (var n = 0; n < tempArray.length; n++) {
                                             if (isNaN(tempArray[n]) == false) {
                                                 if (data.rows[i]['row_' + i + '_' + n]) {
                                                     xxARGS = xxARGS + $.fn.prnGrid_escape(data.rows[i]['row_' + i + '_' + n]) + ",";
                                                 }
-                                            }                                            
+                                            }
                                         }
                                         if (xxARGS.substr(xxARGS.length - 1) == ",") {
                                             xxARGS = xxARGS.substring(0, xxARGS.length - 1);
@@ -459,7 +459,7 @@ var prncGrdRefreshTable = new Array();
                                         xxARGS = "'" + tblOptions[j].functionArguments + "'";
                                     }
                                 }
-                                
+
                                 allTog = allTog + "(" + xxARGS + ");";
                             } else {
                                 allTog = "alert('nothing');";
@@ -475,8 +475,8 @@ var prncGrdRefreshTable = new Array();
                                 html = html + "<td " + CellTypeX + " style=\"display:none;\"></td>";
                             }
                         }
-                        
-                    }                    
+
+                    }
                 }
                 html = html + "</tr>";
 
@@ -492,14 +492,14 @@ var prncGrdRefreshTable = new Array();
         $.fn.prnGrid_filterChanged = function (txtUUU) {
             var whtX = $(txtUUU).attr('id');
             var rIn = whtX.split('_');
-            txtUUU = rIn[rIn.length -1];
+            txtUUU = rIn[rIn.length - 1];
             var lst = document.getElementById('cmb_prncGrid_FilterBy_' + txtUUU);
             var l_filter = lst[lst.selectedIndex].value;
             var tbl = document.getElementById(txtUUU);
             var txtIndex = document.getElementById('txt_prncGrid_Index_' + txtUUU);
 
             for (var i = 0; i < tbl.rows[0].cells.length; i++) {
-                try {                                 
+                try {
                     if (document.getElementById('lblprncGrid_ColHeader_' + i + '_' + txtUUU)) {
                         var xtxt = document.getElementById('lblprncGrid_ColHeader_' + i + '_' + txtUUU).innerHTML;
                         if (xtxt == l_filter) {
@@ -509,7 +509,7 @@ var prncGrdRefreshTable = new Array();
                     }
                 } catch (e) {
                     alert(e.Message);
-                }                
+                }
             }
 
             $.fn.prnGrid_resetFilter(txtUUU);
@@ -564,7 +564,7 @@ var prncGrdRefreshTable = new Array();
                 }
             }
 
-            if (funcExists == false) {                
+            if (funcExists == false) {
                 prncGrdSaveFunctions.push([$(this).attr('id'), xFunction]);
             }
         }
@@ -576,7 +576,7 @@ var prncGrdRefreshTable = new Array();
             //alert("ERROR: Table ''" + $(element).attr('id') + "'' doesn't exist. Please check your '.populateFromStoredProc' for typos and try again.");
             return false;
         }
-        prnGridFunction_Wait();
+        prnGridFunction_Wait($(element).attr('id'));
         $.ajax({
             url: JsonHndlr,
             data: JSON.stringify({ "prncFunction": "saveChanges", "StoredProc": storedProc, "connection": conn, "paramsPrinceGrid": spParams }),
@@ -598,11 +598,11 @@ var prncGrdRefreshTable = new Array();
                         for (var i = 0; i < prncGrdRefreshTable.length; i++) {
                             if (prncGrdRefreshTable[i][0] == $(element).attr('id')) {
                                 refrshExists = true;
-                                tmpArr = prncGrdRefreshTable[i][1];                                
+                                tmpArr = prncGrdRefreshTable[i][1];
                                 break;
                             }
                         }
-                        
+
                         if (refrshExists == false) {
                             prnGridFunction_Done();
                         } else {
@@ -648,7 +648,7 @@ function prncGrdAssigSaveFunction() {
             };
 
             for (var i = 1; i < tblX.rows.length; i++) {
-                var lbl = document.getElementById('prncGrd_lblEditDataHolder_' + (i -1));
+                var lbl = document.getElementById('prncGrd_lblEditDataHolder_' + (i - 1));
                 var txt = document.getElementById('prncGrd_txtEditBox_' + (i - 1));
                 var coln = document.getElementById('prncGrd_lblEditColName_' + (i - 1));
                 var xLbl = null;
@@ -667,11 +667,11 @@ function prncGrdAssigSaveFunction() {
                         xCol = xCol.substring(0, xCol.length - 1);
                     }
                 }
-                
+
                 var entry = {
                     column: xCol + '[' + (i - 1) + ']',
                     value: xLbl,
-                    text: xTxt 
+                    text: xTxt
                 }
 
                 jsonData.entry.push(entry);
@@ -685,7 +685,7 @@ function prncGrdAssigSaveFunction() {
     }
 }
 
-function prncGrdsortTable(table, col, imgz) {    
+function prncGrdsortTable(table, col, imgz) {
     table = document.getElementById(table);
     var idSp = imgz.split('_');
     var xxID = idSp[idSp.length - 1];
@@ -727,7 +727,7 @@ function prncGrdsortTable(table, col, imgz) {
         }
 
         var tb = table.tBodies[0],
-            tr = arrRws,            
+            tr = arrRws,
             i;
         reverse = -((+reverse) || -1);
         tr = tr.sort(function (a, b) {
@@ -746,7 +746,7 @@ function prncGrdsortTable(table, col, imgz) {
         for (i = 0; i < tr.length; ++i) tb.appendChild(tr[i]);
     } catch (e) {
         alert(e.message);
-    }    
+    }
 }
 
 var prncImgSortASC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAjklEQVQ4jc3QMQrCQBCF4Y9g4XksvJh4IitPISGIkMLWwoOIIsYmmjUsSzbb+GCK3Z158+9jUI2DAnV9jVX3FVU1wXiJRQlBUlMIig0aA10zxyD8f7L/fzM4Geg+dcwxeEbuXrHG2RlcR4MdLjkma9wDghtWwXssg28WFVpsg4ENzsH5kVj+k88euxx0eANYCCtzz61PQQAAAABJRU5ErkJggg==";
@@ -770,7 +770,7 @@ function prncGrdOption(columnHeader, columnType, isEditable, buttonText, runFunc
     if (functionArguments == null || functionArguments == false) {
         functionArguments = "allCells";
     }
-    this.functionArguments = functionArguments;    
+    this.functionArguments = functionArguments;
 };
 
 function prncFunctionAttachWait(attchElemnt) {
@@ -779,7 +779,7 @@ function prncFunctionAttachWait(attchElemnt) {
     }
     try {
         // Add Edit menu -----
-        var $dvBackEE = $('<div />').attr('id', 'prncGrid_dvEditMenu').css({ 'padding': '10px 25px 10px 25px', 'border': '1px solid #CFD2D6', 'position': 'absolute', 'top': '0px', 'left': '0px', 'background-color': '#EEF3E2', 'display': 'none' });
+        var $dvBackEE = $('<div />').attr('id', 'prncGrid_dvEditMenu').css({ 'padding': '10px 25px 10px 25px', 'border': '1px solid #CFD2D6', 'position': 'absolute', 'top': '0px', 'left': '0px', 'background-color': '#EEF3E2', 'z-index': '997', 'display': 'none' });
         $dvBackEE.insertAfter($('#' + attchElemnt));
 
         var $imgEE = $('<img />').attr({ 'alt': '', 'src': prncImgClose }).css({ 'position': 'absolute', 'top': '-17px', 'left': '100%', 'margin-left': '-17px', 'cursor': 'pointer' }).appendTo($dvBackEE);
@@ -802,7 +802,7 @@ function prncFunctionAttachWait(attchElemnt) {
         });
 
         // Add wait panel
-        var $dvBack = $('<div />').attr('id', 'prncGrid_divOverlay').css({ 'position': 'fixed', 'width': '100%', 'height': '100%', 'top': '0px', 'left': '0px', 'background-color': 'black', 'opacity': '0.85', 'display': 'none' });
+        var $dvBack = $('<div />').attr('id', 'prncGrid_divOverlay').css({ 'position': 'fixed', 'width': '100%', 'height': '100%', 'top': '0px', 'left': '0px', 'background-color': 'black', 'opacity': '0.85', 'z-index': '998', 'display': 'none' });
         $dvBack.insertAfter($('#prncGrid_dvEditMenu')); //attchElemnt
 
         var $dvWaitHoldr = $('<div />').attr('id', 'prncGrid_dvWaitHolder').css({ 'position': 'absolute', 'padding-top': '40px', 'padding-bottom': '40px', 'background-color': 'white', 'border': '6px solid #20B2AA', 'width': '250px', 'left': '50%', 'top': '150px', 'margin-left': '-125px' });
@@ -817,17 +817,27 @@ function prncFunctionAttachWait(attchElemnt) {
     } catch (e) {
         alert(e.message + " - (prncFunctionAttachWait)");
     }
-    
+
 }
 
-function prnGridFunction_Wait() {
-    var dvWait = document.getElementById('prncGrid_divOverlay');
-    dvWait.style.display = '';
+function prnGridFunction_Wait(elmx) {
+    $('#prncGrid_divOverlay').stop();
+    $('#prncGrid_divOverlay').css('opacity', '0');
+    $('#prncGrid_divOverlay').css('display', '');
+    $('#prncGrid_divOverlay').fadeTo("fast", 0.85, function () {
+        //
+    });
+    //var dvWait = document.getElementById('prncGrid_divOverlay');
+    //dvWait.style.display = '';
 }
 
 function prnGridFunction_Done() {
-    var dvWait = document.getElementById('prncGrid_divOverlay');
-    dvWait.style.display = 'none';
+    $('#prncGrid_divOverlay').stop();
+    $('#prncGrid_divOverlay').fadeTo("fast", 0, function () {
+        $('#prncGrid_divOverlay').css('display', 'none');
+    });
+    //var dvWait = document.getElementById('prncGrid_divOverlay');
+    //dvWait.style.display = 'none';
 }
 
 function prncFunctionShowEditDiv() {
@@ -843,7 +853,7 @@ function prncFunctionShowEditDiv() {
     $('#prncGrid_tblEdit').empty();
     $('#prncGrid_tblEdit').append("<tr><td colspan=\"2\" style=\"text-align:center;padding:4px;box-shadow:4px 4px 2px white;background-color:#CFD2D6;\"><strong>EDIT ROW CONTENTS</strong></td></tr>");
     var xCnt = 0;
-    for (var i = 0; i < (arguments.length - 2) ; i += 2) {
+    for (var i = 0; i < (arguments.length - 2); i += 2) {
         var arg1 = arguments[i];
         var arg2 = arguments[i + 1];
         var whatIs = arg1.split('|')[0];
@@ -856,7 +866,7 @@ function prncFunctionShowEditDiv() {
             argCaption = argCaption + ":";
         }
 
-        if (whatIs == "0") {                        
+        if (whatIs == "0") {
         } else if (whatIs == "1") {
             xhideLbl = "display:none;";
             txtBox = "<input id=\"prncGrd_txtEditBox_" + xCnt + "\" type=\"text\" name=\"fname\" style=\"font-size:small;\" value=\"" + $.trim(arg2) + "\" />";
@@ -872,7 +882,7 @@ function prncFunctionShowEditDiv() {
         $('#prncGrid_tblEdit').append(html);
         xCnt++;
     }
-    
+
     var dv = document.getElementById("prncGrid_dvEditMenu");
 
     dv.style.height = '0px';
@@ -883,8 +893,8 @@ function prncFunctionShowEditDiv() {
     if ('srcElement' in e) { // handler for stupid IE // pageX === undefined
         //alert('ie');
         try {
-            var posx = window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
-            var posy = window.event.clientY + document.body.scrollTop  + document.documentElement.scrollTop; 
+            var posx = window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            var posy = window.event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
 
             //var parentOffset = $("#prncGrid_dvEditMenu").parent().offset();
             //var paddingg = (20 + 10 + 4); // include the padding of all possible elements encapsulating our element
@@ -920,7 +930,7 @@ function prncFunctionShowEditDiv() {
         });
     } catch (ez) {
         alert(ez.message + " - (prncFunctionShowEditDiv)");
-    }    
+    }
 }
 
 function prncFunctionHideEditDiv() {
