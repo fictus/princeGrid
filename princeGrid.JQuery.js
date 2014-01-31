@@ -1,7 +1,7 @@
 ﻿/****************************
     PrinceGrid.JQuery.js
     --------------------
-    Version 0.0.3 (2014)
+    Version 0.0.4 (2014)
 
 
     Created by Luis Valle
@@ -422,9 +422,9 @@ var prncGrdRefreshTable = new Array();
                                 if (tblOptions[j].functionArguments == 'allCells') {
                                     for (var n = 0; n < totalCELLS ; n++) {
                                         if (data.rows[i]['row_' + i + '_' + n]) {
-                                            xxARGS = xxARGS + "'" + data.rows[i]['row_' + i + '_' + n] + "',";
+                                            xxARGS = xxARGS + $.fn.prnGrid_escape(data.rows[i]['row_' + i + '_' + n]) + ",";
                                         } else {
-                                            xxARGS = xxARGS + "'',";
+                                            xxARGS = xxARGS + $.fn.prnGrid_escape("") + ",";
                                         }                                        
                                     }
                                     if (xxARGS.substr(xxARGS.length - 1) == ",") {
@@ -436,7 +436,7 @@ var prncGrdRefreshTable = new Array();
                                         for (var n = 0; n < tempArray.length ; n++) {
                                             if (isNaN(tempArray[n]) == false) {
                                                 if (data.rows[i]['row_' + i + '_' + n]) {
-                                                    xxARGS = xxARGS + "'" + data.rows[i]['row_' + i + '_' + n] + "',";
+                                                    xxARGS = xxARGS + $.fn.prnGrid_escape(data.rows[i]['row_' + i + '_' + n]) + ",";
                                                 }
                                             }                                            
                                         }
