@@ -1,7 +1,7 @@
 ﻿/****************************
     PrinceGrid.JQuery.js
     --------------------
-    Version 0.0.4 (2014)
+    Version 0.0.5 (2014)
 
 
     Created by Luis Valle
@@ -270,13 +270,27 @@ var prncGrdRefreshTable = new Array();
             //--- Add Header -----
             var html = "";
             var sortClick = "";
+            var editButtonShow = "";
+            if (tblOptions != null) {
+                for (var n = 0; n < tblOptions.length ; n++) {
+                    if (tblOptions[n].isEditable == true) {
+                        editButtonShow = "<img id=\"prncGrdImg_DblClick_" + $(element).attr('id') + "\" alt=\"\" title=\"To edit Table contents double-click desired ROW.\" src=\"" + prncImgEditable + "\" style=\"position:absolute;margin-left:-17px;margin-top:-17px;\" onclick=\"alert('To edit Table contents double-click desired ROW.');\" onmouseover=\"$(this).css('cursor','pointer');\" onmouseout=\"$(this).css('cursor','default');\" />";
+                        break;
+                    }
+                }
+            }
+            
             if (tblOptions == null) {
                 totalCELLS = parseInt(data.ColCount);
 
                 html = "<tr>";
                 for (var i = 0; i < totalCELLS ; i++) {
+                    var ccTmp = "";
+                    if (i == 0) {
+                        ccTmp = editButtonShow;
+                    }
                     sortClick = "<img id=\"img_prncGrd_col_" + i + "_" + $(element).attr('id') + "\" alt=\"▼\" src=\"" + prncImgSortASC + "\" style=\"FILTER:alpha(opacity=30);opacity:0.3;float:right;\" onclick=\"prncGrdsortTable('" + $(element).attr('id') + "'," + i + ",'img_prncGrd_col_" + i + "_" + $(element).attr('id') + "');\" onmouseover=\"$(this).css('cursor','pointer');\" onmouseout=\"$(this).css('cursor','default');\" /></input><input id=\"txt_prncGrid_imgIndex_" + i + "_" + $(element).attr('id') + "\" type=\"text\" name=\"txt_prncGrid_imgIndex_" + i + "_" + $(element).attr('id') + "\" style=\"display:none;\" value=\"false\"></input>";
-                    html = html + "<th id=\"" + 'col_' + i + "\" class=\"prcGridTblhead\"><div style=\"display:table;width:100%;\"><div style=\"display:table-row;\"><div style=\"display:table-cell;text-align:center;\"><span id=\"lblprncGrid_ColHeader_" + i + "_" + $(element).attr('id') + "\">" + data.headder[i]['col_' + i] + "</span></div><div style=\"display:table-cell;text-align:right;\">" + sortClick + "</div></div></div></th>";
+                    html = html + "<th id=\"" + 'col_' + i + "\" class=\"prcGridTblhead\">" + ccTmp + "<div style=\"display:table;width:100%;\"><div style=\"display:table-row;\"><div style=\"display:table-cell;text-align:center;\"><span id=\"lblprncGrid_ColHeader_" + i + "_" + $(element).attr('id') + "\">" + data.headder[i]['col_' + i] + "</span></div><div style=\"display:table-cell;text-align:right;\">" + sortClick + "</div></div></div></th>";
                 }
                 html = html + "</tr>";
                 $(element).append(html);
@@ -284,16 +298,22 @@ var prncGrdRefreshTable = new Array();
                 totalCELLS = tblOptions.length;
 
                 html = "<tr>";
+                var hiddenFirstCol = -1;
                 for (var i = 0; i < tblOptions.length; i++) {
                     var xClOpt = tblOptions[i];
-                    if (xClOpt.columnType == 3) {
-                        html = html + "<th style='display:none;' class='prcGridTblhead'>" + xClOpt.columnHeader + "</th>";
+                    var ccTmp = "";
+                    if (xClOpt.columnType == 3) {                        
+                        html = html + "<th style='display:none;' class='prcGridTblhead'>" + ccTmp + xClOpt.columnHeader + "</th>";
                     } else {
+                        if (hiddenFirstCol == -1) {
+                            ccTmp = editButtonShow;
+                            hiddenFirstCol = 0;
+                        }
                         sortClick = "";
                         if (xClOpt.columnType == 0) {
                             sortClick = "<img id=\"img_prncGrd_col_" + i + "_" + $(element).attr('id') + "\" alt=\"▼\" src=\"" + prncImgSortASC + "\" style=\"FILTER:alpha(opacity=30);opacity:0.3;float:right;\" onclick=\"prncGrdsortTable('" + $(element).attr('id') + "'," + i + ",'img_prncGrd_col_" + i + "_" + $(element).attr('id') + "');\" onmouseover=\"$(this).css('cursor','pointer');\" onmouseout=\"$(this).css('cursor','default');\" /></input><input id=\"txt_prncGrid_imgIndex_" + i + "_" + $(element).attr('id') + "\" type=\"text\" name=\"txt_prncGrid_imgIndex_" + i + "_" + $(element).attr('id') + "\" style=\"display:none;\" value=\"false\"></input>";
                         }
-                        html = html + "<th id=\"" + 'col_' + i + "\" class=\"prcGridTblhead\"><div style=\"display:table;width:100%;\"><div style=\"display:table-row;\"><div style=\"display:table-cell;text-align:center;\"><span id=\"lblprncGrid_ColHeader_" + i + "_" + $(element).attr('id') + "\">" + xClOpt.columnHeader + "</span></div><div style=\"display:table-cell;text-align:right;\">" + sortClick + "<div></div></div></th>";
+                        html = html + "<th id=\"" + 'col_' + i + "\" class=\"prcGridTblhead\">" + ccTmp + "<div style=\"display:table;width:100%;\"><div style=\"display:table-row;\"><div style=\"display:table-cell;text-align:center;\"><span id=\"lblprncGrid_ColHeader_" + i + "_" + $(element).attr('id') + "\">" + xClOpt.columnHeader + "</span></div><div style=\"display:table-cell;text-align:right;\">" + sortClick + "<div></div></div></th>";
                     }                                       
                 }
 
@@ -302,17 +322,9 @@ var prncGrdRefreshTable = new Array();
             }            
 
             //--- Add filter -----
-            var editButtonShow = "";
-            if (tblOptions != null) {
-                for (var n = 0; n < tblOptions.length ; n++) {
-                    if (tblOptions[n].isEditable == true) {
-                        editButtonShow = "<img id=\"prncGrdImg_DblClick_" + $(element).attr('id') + "\" alt=\"\" title=\"To edit Table contents double-click desired ROW.\" src=\"" + prncImgEditable + "\" style=\"position:absolute;left:70%;margin-left:-24px;\" onclick=\"alert('To edit Table contents double-click desired ROW.');\" onmouseover=\"$(this).css('cursor','pointer');\" onmouseout=\"$(this).css('cursor','default');\" />";
-                        break;
-                    }
-                }
-            }
+            
             html = "<tr><th colspan=\"" + totalCELLS + "\" class=\"prcGridTblFilter\">"; //data.ColCount
-            html = html + editButtonShow + "<span style=\"font-weight:normal;color:#696969;font-size:small;\">Filter by:</span>";
+            html = html + "<span style=\"font-weight:normal;color:#696969;font-size:small;\">Filter by:</span>";
             html = html + "<select id=\"cmb_prncGrid_FilterBy_" + $(element).attr('id') + "\" name=\"cmb_prncGrid_FilterBy_" + $(element).attr('id') + "\" style=\"font-weight:normal;color:black;font-size:small;width:auto;background-color:#EEF3E2;color:#696969;margin-left:5px;\">";
             var indexIdentified = -1;
             for (var i = 0; i < totalCELLS ; i++) { //parseInt(data.ColCount)
