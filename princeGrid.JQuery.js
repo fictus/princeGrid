@@ -1,7 +1,7 @@
 ﻿/****************************
     PrinceGrid.JQuery.js
     --------------------
-    Version 0.0.2 (2014)
+    Version 0.0.3 (2014)
 
 
     Created by Luis Valle
@@ -487,11 +487,17 @@ var prncGrdRefreshTable = new Array();
             var txtIndex = document.getElementById('txt_prncGrid_Index_' + txtUUU);
 
             for (var i = 0; i < tbl.rows[0].cells.length; i++) {
-                var xtxt = document.getElementById('lblprncGrid_ColHeader_' + i + '_' + txtUUU).innerHTML;                
-                if (xtxt == l_filter) {                    
-                    txtIndex.value = i;
-                    break;
-                }
+                try {                                 
+                    if (document.getElementById('lblprncGrid_ColHeader_' + i + '_' + txtUUU)) {
+                        var xtxt = document.getElementById('lblprncGrid_ColHeader_' + i + '_' + txtUUU).innerHTML;
+                        if (xtxt == l_filter) {
+                            txtIndex.value = i;
+                            break;
+                        }
+                    }
+                } catch (e) {
+                    alert(e.Message);
+                }                
             }
 
             $.fn.prnGrid_resetFilter(txtUUU);
