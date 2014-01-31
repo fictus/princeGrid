@@ -1,6 +1,6 @@
 PrinceGrid.JQuery.js
 ====================
-PrinceGrid.JQuery.js Version 0.0.5 (2014)
+PrinceGrid.JQuery.js Version 0.0.6 (2014)
 
 
 See a live Demo here:
