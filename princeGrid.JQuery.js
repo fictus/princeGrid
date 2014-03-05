@@ -1,173 +1,177 @@
 ﻿/****************************
-PrinceGrid.JQuery.js
---------------------
-Version 0.0.6 (2014)
+    PrinceGrid.JQuery.js
+    --------------------
+    Version 0.0.7 (2014)
 
 
-Created by Luis Valle
+    Created by Luis Valle
 
-REQUIRED COMPONENTS:
--------------------
-jquery-1.7.2.min.js (http://code.jquery.com/jquery-1.7.2.min.js)
-jQuery UI 1.8.16 (http://jqueryui.com/resources/download/jquery-ui-1.8.16.zip)
-json2.js (for browsers that don't support json parsing) (https://github.com/douglascrockford/JSON-js/blob/master/json2.js)
-prncGrd.ashx (generic AJAX handler)
-princeGrid.UI.css (for table style)
-
-
-
-
-
-WHAT IS PrinceGrid.JQuery.js?
------------------------------
-It is a JQuery plugin to create tables via AJAX in MS SQL back-ends by passing SQL StoredProcedures .
-The table also gives Row-Editing functionality, sorting and basic filtering.
+    REQUIRED COMPONENTS:
+    -------------------
+    jquery-1.7.2.min.js (http://code.jquery.com/jquery-1.7.2.min.js)
+    jQuery UI 1.8.16 (http://jqueryui.com/resources/download/jquery-ui-1.8.16.zip)
+    json2.js (for browsers that don't support json parsing) (https://github.com/douglascrockford/JSON-js/blob/master/json2.js)
+    prncGrd.ashx (generic AJAX handler)
+    princeGrid.UI.css (for table style)
 
 
 
 
-BASIC USE:
------------
-(1) Create an html table with no rows, with a unique ID, like:
 
-<table id="tblMyCustomers">
-</table>
+    WHAT IS PrinceGrid.JQuery.js?
+    -----------------------------
+    It is a JQuery plugin to create tables via AJAX in MS SQL back-ends by passing SQL StoredProcedures .
+    The table also gives Row-Editing functionality, sorting and basic filtering.
 
-(2) Modify the included prncGrd.ashx namespace to work with your aspx page.
 
-(3) Include PrinceGrid.JQuery.js (and dependencies) in your aspx page header.
+
+
+    BASIC USE:
+    -----------
+    (1) Create an html table with no rows, with a unique ID, like:
+
+            <table id="tblMyCustomers">
+            </table>
+
+    (2) Modify the included prncGrd.ashx namespace to work with your aspx page.
+
+    (3) Include PrinceGrid.JQuery.js (and dependencies) in your aspx page header.
         
-<script type="text/javascript" src='princeGrid.JQuery.js'></script>
-<script type="text/javascript" src="json2.js"></script>
-<link href='princeGrid.UI.css' rel="stylesheet" />
+            <script type="text/javascript" src='princeGrid.JQuery.js'></script>
+            <script type="text/javascript" src="json2.js"></script>
+            <link href='princeGrid.UI.css' rel="stylesheet" />
 
-(4) Initiate PrinceGrid in your javascript:
+    (4) Initiate PrinceGrid in your javascript:
 
-// if no SQL params are needed you must pass 'null'
-var SQLparams = { "@parentName": "010200036" };
+            // if no SQL params are needed you must pass 'null'
+            var SQLparams = { "@parentName": "010200036" };
 
-// conn is the name of your connection from your web.config file
-var conn = 'PrinceSQLDataServer';
+            // conn is the name of your connection from your web.config file
+            var conn = 'PrinceSQLDataServer';
 
-$('#tblMyCustomers').populateFromStoredProc('spRetrieveFourthShiftUsersPmc', null, 'prncGrd.ashx', conn); 
-
-
-
-
-
-That's all! PrinceGrid will communicate with the SQL Server and populate your table.
+            $('#tblMyCustomers').populateFromStoredProc('spRetrieveFourthShiftUsersPmc', null, 'prncGrd.ashx', conn); 
 
 
 
 
-IF YOU ENABLE TABLE-EDITING:
-----------------------------
-simply double-click desired Row to edit Row-Contents (see examples below)
 
-ADVANCED OPTIONS:
-------------------
-prncGrdOption constructor
-~~~~~~~~~~~~~~~~~~~~~~~~~
+        That's all! PrinceGrid will communicate with the SQL Server and populate your table.
 
-You can specify the following custom column 'prncGrdOption' constructor with the following parameters:
 
-PARAMETER 0 - COLUMN NAME
-(ex. "Customer Name")
 
-PARAMETER 1 - COLUMN TYPE
-0 = NORMAL/DEFAULT
-1 = LINK BUTTON
-2 = BUTTON
-3 = HIDE COLUMN
 
-PARAMETER 2 - ENABLE EDITING
-false = disabled
-true  = enabled
+    IF YOU ENABLE TABLE-EDITING:
+    ----------------------------
+        simply double-click desired Row to edit Row-Contents (see examples below)
 
-PARAMETER 3 - LINK or BUTTON caption text
-(ex. "Click HERE")
+    ADVANCED OPTIONS:
+    ------------------
+        prncGrdOption constructor
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PARAMETER 4 - IF BUTTON, SPECIFY YOUR JAVASCRIPT FUNCTION (all Row-Data will be passed to your function; there you can do what ever you want with this data):
+        You can specify the following custom column 'prncGrdOption' constructor with the following parameters:
+
+        PARAMETER 0 - COLUMN NAME
+            (ex. "Customer Name")
+
+        PARAMETER 1 - COLUMN TYPE
+            0 = NORMAL/DEFAULT
+            1 = LINK BUTTON
+            2 = BUTTON
+            3 = HIDE COLUMN
+            4 = CHECKBOX
+
+        PARAMETER 2 - ENABLE EDITING
+            false = disabled
+            true  = enabled
+
+        PARAMETER 3 - LINK or BUTTON caption text
+            (ex. "Click HERE")
+
+        PARAMETER 4 - IF BUTTON, SPECIFY YOUR JAVASCRIPT FUNCTION (all Row-Data will be passed to your function; there you can do what ever you want with this data):
             
-function populateCustomersTable() {
-var SQLparams = { "@itemNumberDwg": "010200036" };
-var conn = 'EngineeringDataServer';
+            function populateCustomersTable() {
+                var SQLparams = { "@itemNumberDwg": "010200036" };
+                var conn = 'EngineeringDataServer';
 
-var myHeader = new Array();
-myHeader.push(new prncGrdOption("Item Number", 0));
-myHeader.push(new prncGrdOption("Customer Name", 0));
-myHeader.push(new prncGrdOption("Item Status", 0));
-myHeader.push(new prncGrdOption("Item Revision", 0));
-myHeader.push(new prncGrdOption("Item UM", 0));
-myHeader.push(new prncGrdOption("Make Buy Code", 0));
-myHeader.push(new prncGrdOption("Customer ID", 0));
-myHeader.push(new prncGrdOption("Drawing Link", 1, false, "Show PDF"));  //<---------------- will create a LINK with the cell-data as the href
-myHeader.push(new prncGrdOption("Released To Production", 0)); 
-myHeader.push(new prncGrdOption("Volume Part", 2, false, "Show", "showCustomerName")); //<-- will create a button that triggers function showCustomerName()
-myHeader.push(new prncGrdOption("Date Entered", 3)); //<------------------------------------ this colum will be hidden
+                var myHeader = new Array();
+                myHeader.push(new prncGrdOption("Item Number", 0));
+                myHeader.push(new prncGrdOption("Customer Name", 0));
+                myHeader.push(new prncGrdOption("Item Status", 0));
+                myHeader.push(new prncGrdOption("Item Revision", 0));
+                myHeader.push(new prncGrdOption("Item UM", 0));
+                myHeader.push(new prncGrdOption("Make Buy Code", 0));
+                myHeader.push(new prncGrdOption("Customer ID", 0));
+                myHeader.push(new prncGrdOption("Drawing Link", 1, false, "Show PDF"));  //<---------------- will create a LINK with the cell-data as the href
+                myHeader.push(new prncGrdOption("Released To Production", 0)); 
+                myHeader.push(new prncGrdOption("Volume Part", 2, false, "Show", "showCustomerName")); //<-- will create a button that triggers function showCustomerName()
+                myHeader.push(new prncGrdOption("Date Entered", 3)); //<------------------------------------ this colum will be hidden
 
-$('#tblMyCustomers').populateFromStoredProc('spEngItemDrawing', SQLparams, 'prncGrd.ashx', conn, myHeader);
-}
+                $('#tblMyCustomers').populateFromStoredProc('spEngItemDrawing', SQLparams, 'prncGrd.ashx', conn, myHeader);
+            }
             
-function showCustomerName() {
-alert(arguments[1]);
+            function showCustomerName() {
+                alert(arguments[1]);
 
-// all your Row-data can be accessed via arguments[?] (enter the desired coulumn index
-}
+                // all your Row-data can be accessed via arguments[?] (enter the desired coulumn index
+            }
 
             
-PARAMETER 5 - IF ANY COLUMN EDITING IS SET TO TRUE you must pass the name of your javascript function for calling the Save Method:
+        PARAMETER 5 - IF ANY COLUMN EDITING IS SET TO TRUE you must pass the name of your javascript function for calling the Save Method:
             
-function populateCustomersTable() {
-var conn = 'DivApplicationsDataServer';
+                function populateCustomersTable() {
+                    var conn = 'DivApplicationsDataServer';
 
-var tblHeader1 = new prncGrdOption("Entry ID", 3);
-var tblHeader2 = new prncGrdOption("Truck", 0);
-var tblHeader3 = new prncGrdOption("Dhm", 0, true); //<----------------- this column will be editable
-var tblHeader4 = new prncGrdOption("Hci", 0, true); //<----------------- this column will be editable
-var tblHeader5 = new prncGrdOption("Lch", 0, true); //<----------------- this column will be editable
-var tblHeader6 = new prncGrdOption("Ohc", 0, true); //<----------------- this column will be editable
-var tblHeader7 = new prncGrdOption("Phc", 0, true); //<----------------- this column will be editable
-var tblHeader8 = new prncGrdOption("Pds", 0, true); //<----------------- this column will be editable
-var tblHeader9 = new prncGrdOption("Other Destinations", 0, true); //<-- this column will be editable
-var tblHeader10 = new prncGrdOption("Last Update", 0);
-var myHeader = [tblHeader1, tblHeader2, tblHeader3, tblHeader4, tblHeader5, tblHeader6, tblHeader7, tblHeader8, tblHeader9, tblHeader10];
+                    var tblHeader1 = new prncGrdOption("Entry ID", 3);
+                    var tblHeader2 = new prncGrdOption("Truck", 0);
+                    var tblHeader3 = new prncGrdOption("Dhm", 0, true); //<----------------- this column will be editable
+                    var tblHeader4 = new prncGrdOption("Hci", 0, true); //<----------------- this column will be editable
+                    var tblHeader5 = new prncGrdOption("Lch", 0, true); //<----------------- this column will be editable
+                    var tblHeader6 = new prncGrdOption("Ohc", 0, true); //<----------------- this column will be editable
+                    var tblHeader7 = new prncGrdOption("Phc", 0, true); //<----------------- this column will be editable
+                    var tblHeader8 = new prncGrdOption("Pds", 4, true); //<----------------- this column will be editable
+                    var tblHeader9 = new prncGrdOption("Other Destinations", 0, true); //<-- this column will be editable
+                    var tblHeader10 = new prncGrdOption("Last Update", 0);
+                    var myHeader = [tblHeader1, tblHeader2, tblHeader3, tblHeader4, tblHeader5, tblHeader6, tblHeader7, tblHeader8, tblHeader9, tblHeader10];
                 
-$('#tblMyCustomers').populateFromStoredProc('spShipmentTruckRoute', null, 'prncGrd.ashx', conn, myHeader);
+                    $('#tblMyCustomers').populateFromStoredProc('spShipmentTruckRoute', null, 'prncGrd.ashx', conn, myHeader);
 
-// pass your javascript editing function
-$('#tblMyCustomers').rowEditFunction("editSaveCustomerParts");
-}
+                    // pass your javascript editing function
+                    $('#tblMyCustomers').rowEditFunction("editSaveCustomerParts");
+                }
 
-function editSaveCustomerParts() {
-//var tblID = arguments[1]; this argument contains your table ID if you need it for something else                    
-//alert(inData.entry[1].value + ' --- ' + inData.entry[1].text + '\n\n' + JSON.stringify(inData)); // Peak inside incoming data to know what entries you need
-//return false;
+                function editSaveCustomerParts() {
+                    //var tblID = arguments[1]; this argument contains your table ID if you need it for something else                    
+                    //alert(inData.entry[1].value + ' --- ' + inData.entry[1].text + '\n\n' + JSON.stringify(inData)); // Peak inside incoming data to know what entries you need
+                    //return false;
 
-// all your editing and original Row-data is received in a JSON object inside arguments[0]
-var inData = arguments[0];
+                    // all your editing and original Row-data is received in a JSON object inside arguments[0]
+                    var inData = arguments[0];
 
                     
 
-if (confirm("Are you sure you want to SAVE these Changes?")) {
-//----- IMPORTANT ------------------------------------------------------------------
-// accessing your incoming data is done in three ways:
-//
-// inData.entry[0].column = contains the name of the column (should you need it)
-// inData.entry[0].value = contains the original value of the cell (before editing)
-// inData.entry[0].text = contains the changes you made in that given cell textbox
-//----------------------------------------------------------------------------------
+                    if (confirm("Are you sure you want to SAVE these Changes?")) {
+                        //----- IMPORTANT ------------------------------------------------------------------
+                        // accessing your incoming data is done in three ways:
+                        //
+                        // inData.entry[0].column = contains the name of the column (should you need it)
+                        // inData.entry[0].value = contains the original value of the cell (before editing)
+                        // inData.entry[0].text = contains the changes you made in that given cell textbox
+                        //
+                        // NOTE: Checkboxes will return a .text result of 1 (if checked) or 0 (if unchecked)
+                        //
+                        //----------------------------------------------------------------------------------
 
-// you must build your SQL Parameters this way:
-var SQLparams = { "@EntryID": inData.entry[0].value, "@dmh": inData.entry[2].text, "@hci": inData.entry[3].text, "@lch": inData.entry[4].text, "@ohc": inData.entry[5].text, "@phc": inData.entry[6].text, "@pds": inData.entry[7].text, "@otherDestinations": inData.entry[8].text };
-var conn = 'DivApplicationsDataServer';
+                        // you must build your SQL Parameters this way:
+                        var SQLparams = { "@EntryID": inData.entry[0].value, "@dmh": inData.entry[2].text, "@hci": inData.entry[3].text, "@lch": inData.entry[4].text, "@ohc": inData.entry[5].text, "@phc": inData.entry[6].text, "@pds": inData.entry[7].text, "@otherDestinations": inData.entry[8].text };
+                        var conn = 'DivApplicationsDataServer';
 
-// finally, you must call 'saveChangesToSQLdb' and pass your Stored Procedure and parameters this way:
-$('#tblMyCustomers').saveChangesToSQLdb('spShipmentUpdateTruckRoute', SQLparams, 'prncGrd.ashx', conn);
-} else {
-return false;
-}
-}
+                        // finally, you must call 'saveChangesToSQLdb' and pass your Stored Procedure and parameters this way:
+                        $('#tblMyCustomers').saveChangesToSQLdb('spShipmentUpdateTruckRoute', SQLparams, 'prncGrd.ashx', conn);
+                    } else {
+                        return false;
+                    }
+                }
 
         
 ***************************/
@@ -272,7 +276,7 @@ var prncGrdRefreshTable = new Array();
             var sortClick = "";
             var editButtonShow = "";
             if (tblOptions != null) {
-                for (var n = 0; n < tblOptions.length; n++) {
+                for (var n = 0; n < tblOptions.length ; n++) {
                     if (tblOptions[n].isEditable == true) {
                         editButtonShow = "<img id=\"prncGrdImg_DblClick_" + $(element).attr('id') + "\" alt=\"\" title=\"To edit Table contents double-click desired ROW.\" src=\"" + prncImgEditable + "\" style=\"position:absolute;margin-left:-17px;margin-top:-17px;\" onclick=\"alert('To edit Table contents double-click desired ROW.');\" onmouseover=\"$(this).css('cursor','pointer');\" onmouseout=\"$(this).css('cursor','default');\" />";
                         break;
@@ -284,7 +288,7 @@ var prncGrdRefreshTable = new Array();
                 totalCELLS = parseInt(data.ColCount);
 
                 html = "<tr>";
-                for (var i = 0; i < totalCELLS; i++) {
+                for (var i = 0; i < totalCELLS ; i++) {
                     var ccTmp = "";
                     if (i == 0) {
                         ccTmp = editButtonShow;
@@ -327,14 +331,14 @@ var prncGrdRefreshTable = new Array();
             html = html + "<span style=\"font-weight:normal;color:#696969;font-size:small;\">Filter by:</span>";
             html = html + "<select id=\"cmb_prncGrid_FilterBy_" + $(element).attr('id') + "\" name=\"cmb_prncGrid_FilterBy_" + $(element).attr('id') + "\" style=\"font-weight:normal;color:black;font-size:small;width:auto;background-color:#EEF3E2;color:#696969;margin-left:5px;\">";
             var indexIdentified = -1;
-            for (var i = 0; i < totalCELLS; i++) { //parseInt(data.ColCount)
+            for (var i = 0; i < totalCELLS ; i++) { //parseInt(data.ColCount)
                 if (tblOptions == null) {
                     indexIdentified = 0;
                     if (data.headder[i]['col_' + i]) {
                         html = html + "<option id=\"opt_prncGrid_" + i + "_" + $(element).attr('id') + "\" value=\"" + data.headder[i]['col_' + i] + "\">" + data.headder[i]['col_' + i] + "</option>";
                     }
                 } else {
-                    if (tblOptions[i].columnType == 0 || tblOptions[i].columnType == 4) {
+                    if (tblOptions[i].columnType == 0) { // || tblOptions[i].columnType == 4
                         if (indexIdentified == -1) {
                             indexIdentified = i;
                         }
@@ -359,11 +363,11 @@ var prncGrdRefreshTable = new Array();
 
             //--- Add ROWS -----
             html = "";
-            for (var i = 0; i < parseInt(data.RowCount); i++) {
+            for (var i = 0; i < parseInt(data.RowCount) ; i++) {
                 var EditableFunction = "";
                 if (tblOptions) {
                     var tableIsEditable = false;
-                    for (var n = 0; n < tblOptions.length; n++) {
+                    for (var n = 0; n < tblOptions.length ; n++) {
                         if (tblOptions[n].isEditable == true) {
                             tableIsEditable = true;
                             break;
@@ -372,12 +376,17 @@ var prncGrdRefreshTable = new Array();
 
                     if (tableIsEditable == true) {
                         var editArray = "";
-                        for (var n = 0; n < tblOptions.length; n++) {
+                        for (var n = 0; n < tblOptions.length ; n++) {
                             var whaEditIs = "";
                             var editCellContent = "";
                             if (tblOptions[n].isEditable == true && tblOptions[n].columnType == 0) {
                                 whaEditIs = $.fn.prnGrid_escape("1|" + tblOptions[n].columnHeader) + ",";
                             } else if (tblOptions[n].isEditable == false && tblOptions[n].columnType == 0) {
+                                whaEditIs = $.fn.prnGrid_escape("0|" + tblOptions[n].columnHeader) + ",";
+                            }
+                            if (tblOptions[n].isEditable == true && tblOptions[n].columnType == 4) {
+                                whaEditIs = $.fn.prnGrid_escape("4|" + tblOptions[n].columnHeader) + ",";
+                            } else if (tblOptions[n].isEditable == false && tblOptions[n].columnType == 4) {
                                 whaEditIs = $.fn.prnGrid_escape("0|" + tblOptions[n].columnHeader) + ",";
                             }
                             if (tblOptions[n].columnType == 1 || tblOptions[n].columnType == 2 || tblOptions[n].columnType == 3) {
@@ -398,7 +407,7 @@ var prncGrdRefreshTable = new Array();
                     }
                 }
                 html = "<tr" + EditableFunction + ">";
-                for (var j = 0; j < totalCELLS; j++) { //parseInt(data.ColCount)
+                for (var j = 0; j < totalCELLS ; j++) { //parseInt(data.ColCount)
                     if (tblOptions == null) {
                         if (data.rows[i]['row_' + i + '_' + j]) {
                             html = html + "<td>" + data.rows[i]['row_' + i + '_' + j] + "</td>";
@@ -432,7 +441,7 @@ var prncGrdRefreshTable = new Array();
 
                                 var xxARGS = "";
                                 if (tblOptions[j].functionArguments == 'allCells') {
-                                    for (var n = 0; n < totalCELLS; n++) {
+                                    for (var n = 0; n < totalCELLS ; n++) {
                                         if (data.rows[i]['row_' + i + '_' + n]) {
                                             xxARGS = xxARGS + $.fn.prnGrid_escape(data.rows[i]['row_' + i + '_' + n]) + ",";
                                         } else {
@@ -445,7 +454,7 @@ var prncGrdRefreshTable = new Array();
                                 } else {
                                     if ($.isArray(tblOptions[j].functionArguments)) {
                                         var tempArray = tblOptions[j].functionArguments;
-                                        for (var n = 0; n < tempArray.length; n++) {
+                                        for (var n = 0; n < tempArray.length ; n++) {
                                             if (isNaN(tempArray[n]) == false) {
                                                 if (data.rows[i]['row_' + i + '_' + n]) {
                                                     xxARGS = xxARGS + $.fn.prnGrid_escape(data.rows[i]['row_' + i + '_' + n]) + ",";
@@ -474,6 +483,17 @@ var prncGrdRefreshTable = new Array();
                             } else {
                                 html = html + "<td " + CellTypeX + " style=\"display:none;\"></td>";
                             }
+                        } else if (tblOptions[j].columnType == 4) {
+                            var CellTypeX = "prncCellType=\"checkbox\"";
+                            var chkBoxChecked = "";
+                            if (data.rows[i]['row_' + i + '_' + j]) {
+                                if (data.rows[i]['row_' + i + '_' + j] == '1' || (data.rows[i]['row_' + i + '_' + j]).toLowerCase() == 'true') {
+                                    chkBoxChecked = "checked=\"\"";
+                                }
+                            }
+
+                            var chkBoxA = "<input type=\"checkbox\" " + chkBoxChecked + " name=\"prncChkBox_" + i + "_" + j + "\" id=\"prncChkBox_" + i + "_" + j + "\" value=\"\" onclick=\"return false;\"></input>";
+                            html = html + "<td " + CellTypeX + ">" + chkBoxA + "</td>";
                         }
 
                     }
@@ -650,6 +670,7 @@ function prncGrdAssigSaveFunction() {
             for (var i = 1; i < tblX.rows.length; i++) {
                 var lbl = document.getElementById('prncGrd_lblEditDataHolder_' + (i - 1));
                 var txt = document.getElementById('prncGrd_txtEditBox_' + (i - 1));
+                var Chkbox = document.getElementById('prncGrd_chkEditBox_' + (i - 1));
                 var coln = document.getElementById('prncGrd_lblEditColName_' + (i - 1));
                 var xLbl = null;
                 var xTxt = null;
@@ -660,6 +681,18 @@ function prncGrdAssigSaveFunction() {
                 }
                 if (txt) {
                     xTxt = $.trim(txt.value);
+                }
+                if (Chkbox) {
+                    if (Chkbox.checked) {
+                        xTxt = '1';
+                    } else {
+                        xTxt = '0';
+                    }
+                    if (xLbl.toLowerCase() == 'true') {
+                        xLbl = '1';
+                    } else if (xLbl.toLowerCase() == 'false') {
+                        xLbl = '0';
+                    }
                 }
                 if (coln) {
                     xCol = $.trim(coln.innerHTML);
@@ -761,7 +794,9 @@ function prncGrdOption(columnHeader, columnType, isEditable, buttonText, runFunc
     if (isEditable == null) {
         isEditable = false;
     }
-    if (columnType != 0) {
+    if (columnType == 0 || columnType == 4) {
+        
+    } else {
         isEditable = false;
     }
     this.isEditable = isEditable;
@@ -821,7 +856,7 @@ function prncFunctionAttachWait(attchElemnt) {
 }
 
 function prnGridFunction_Wait(elmx) {
-    $('#prncGrid_divOverlay').stop();
+    $('#prncGrid_divOverlay').stop();   
     $('#prncGrid_divOverlay').css('opacity', '0');
     $('#prncGrid_divOverlay').css('display', '');
     $('#prncGrid_divOverlay').fadeTo("fast", 0.85, function () {
@@ -832,7 +867,7 @@ function prnGridFunction_Wait(elmx) {
 }
 
 function prnGridFunction_Done() {
-    $('#prncGrid_divOverlay').stop();
+    $('#prncGrid_divOverlay').stop();    
     $('#prncGrid_divOverlay').fadeTo("fast", 0, function () {
         $('#prncGrid_divOverlay').css('display', 'none');
     });
@@ -853,7 +888,7 @@ function prncFunctionShowEditDiv() {
     $('#prncGrid_tblEdit').empty();
     $('#prncGrid_tblEdit').append("<tr><td colspan=\"2\" style=\"text-align:center;padding:4px;box-shadow:4px 4px 2px white;background-color:#CFD2D6;\"><strong>EDIT ROW CONTENTS</strong></td></tr>");
     var xCnt = 0;
-    for (var i = 0; i < (arguments.length - 2); i += 2) {
+    for (var i = 0; i < (arguments.length - 2) ; i += 2) {
         var arg1 = arguments[i];
         var arg2 = arguments[i + 1];
         var whatIs = arg1.split('|')[0];
@@ -872,6 +907,13 @@ function prncFunctionShowEditDiv() {
             txtBox = "<input id=\"prncGrd_txtEditBox_" + xCnt + "\" type=\"text\" name=\"fname\" style=\"font-size:small;\" value=\"" + $.trim(arg2) + "\" />";
         } else if (whatIs == "2") {
             xhideRow = "style=\"display:none;\"";
+        } else if (whatIs == "4") {
+            var chkBoxChecked = "";
+            xhideLbl = "display:none;";
+            if ($.trim(arg2) == '1' || ($.trim(arg2)).toLowerCase() == 'true') {
+                chkBoxChecked = "checked=\"\"";
+            }            
+            txtBox = "<input type=\"checkbox\" " + chkBoxChecked + " name=\"prncGrd_chkEditBox_" + xCnt + "\" id=\"prncGrd_chkEditBox_" + xCnt + "\" value=\"\"></input>";
         }
 
         html = html + "<tr " + xhideRow + "><td style=\"text-align:right;\">";
