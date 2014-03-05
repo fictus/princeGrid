@@ -1,6 +1,6 @@
 PrinceGrid.JQuery.js
 ====================
-PrinceGrid.JQuery.js Version 0.0.6 (2014)
+PrinceGrid.JQuery.js Version 0.0.7 (2014)
 
 
 See a live Demo here:
@@ -83,6 +83,7 @@ http://www.evicore.com/princeGrid.aspx
             1 = LINK BUTTON
             2 = BUTTON
             3 = HIDE COLUMN
+            4 = CHECKBOX
 
         PARAMETER 2 - ENABLE EDITING
             false = disabled
@@ -132,7 +133,7 @@ http://www.evicore.com/princeGrid.aspx
                     var tblHeader5 = new prncGrdOption("Lch", 0, true); //<----------------- this column will be editable
                     var tblHeader6 = new prncGrdOption("Ohc", 0, true); //<----------------- this column will be editable
                     var tblHeader7 = new prncGrdOption("Phc", 0, true); //<----------------- this column will be editable
-                    var tblHeader8 = new prncGrdOption("Pds", 0, true); //<----------------- this column will be editable
+                    var tblHeader8 = new prncGrdOption("Pds", 4, true); //<----------------- this column will be editable
                     var tblHeader9 = new prncGrdOption("Other Destinations", 0, true); //<-- this column will be editable
                     var tblHeader10 = new prncGrdOption("Last Update", 0);
                     var myHeader = [tblHeader1, tblHeader2, tblHeader3, tblHeader4, tblHeader5, tblHeader6, tblHeader7, tblHeader8, tblHeader9, tblHeader10];
@@ -160,6 +161,9 @@ http://www.evicore.com/princeGrid.aspx
                         // inData.entry[0].column = contains the name of the column (should you need it)
                         // inData.entry[0].value = contains the original value of the cell (before editing)
                         // inData.entry[0].text = contains the changes you made in that given cell textbox
+                        //
+                        // NOTE: Checkboxes will return a .text result of 1 (if checked) or 0 (if unchecked)
+                        //
                         //----------------------------------------------------------------------------------
 
                         // you must build your SQL Parameters this way:
