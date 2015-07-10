@@ -20,7 +20,7 @@
 {
 "name": "Luis Valle",
 "email": "luis.e.valle@gmail.com",
-"url": "http://www.evicore.com"
+"url": "http://www.evicore.net"
 }
 ],
 "licenses": [
@@ -30,9 +30,9 @@
 }
 ],
 "bugs": "https://github.com/fictus/princeGrid/issues",
-"homepage": "http://www.evicore.com/princeGrid.aspx",
+"homepage": "http://www.evicore.net/princeGrid.aspx",
 "docs": "https://github.com/fictus/princeGrid/blob/master/README.md",
-"demo": "http://www.evicore.com/princeGrid.aspx",
+"demo": "http://www.evicore.net/princeGrid.aspx",
 "download": "https://github.com/fictus/princeGrid",
 "dependencies": {
 "jquery": "1.7.2",
