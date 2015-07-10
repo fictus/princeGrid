@@ -5,7 +5,7 @@ PrinceGrid.JQuery.js Version 0.0.7 (2014)
 
 See a live Demo here:
 =====================
-http://www.evicore.com/princeGrid.aspx
+http://www.evicore.net/princeGrid.aspx
 
 
     Created by Luis Valle
